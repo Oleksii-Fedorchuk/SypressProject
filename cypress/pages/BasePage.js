@@ -20,7 +20,8 @@ export default class BasePage {
     }
 
     openMyProfileDropdown() {
-        return cy.xpath(`//button[@id='userNavDropdown']`).click();
+        return cy.xpath(`//button[@id='userNavDropdown']`)
+            .click();
     }
 
     garageItemInMyProfileDropdown() {
@@ -51,6 +52,19 @@ export default class BasePage {
     logoutItemInMyProfileDropdown() {
         return cy.xpath(`//button[contains(@class, 'dropdown-item btn btn-link user-nav_link') 
         and contains(text(), 'Logout')]`);
+    }
+
+    signInButton() {
+        return cy.xpath(`//button [contains(@class, 'btn btn-outline-white header_signin') 
+        and contains(text(), 'Sign In')]`);
+    }
+
+    signInEmail() {
+        return cy.xpath(`//input[@id='signinEmail']`);
+    }
+
+    signInPassword() {
+        return cy.xpath(`//input[@id='signinPassword']`);
     }
 
     //Body selectors
@@ -88,17 +102,6 @@ export default class BasePage {
         return cy.xpath(`//p[@class='profile_name display-4']`);
     }
 
-    // Footer selectors
-
-    rightsReserved() {
-        return cy.xpath(`//p[contains(text(), '© 2021 Hillel IT school')]`)
-    }
-
-    footerContent() {
-        return cy.xpath(`//p[contains(text(), 'Hillel auto developed in Hillel IT school 
-        for educational purposes of QA courses.')`)
-    }
-
     createAccount(user) {
         this.signUpName().clear().type(user.name);
         this.signUpLastName().clear().type(user.lastName);
@@ -125,6 +128,11 @@ export default class BasePage {
         this.openMyProfileDropdown();
         this.profileItemInMyProfileDropdown().click()
         this.profileName().should('contain.text', "SomeName");
+    }
+
+
+    findButtonByText(text) {
+        return cy.xpath(`//button[contains(text(), '${text}')]`);
     }
 
 }

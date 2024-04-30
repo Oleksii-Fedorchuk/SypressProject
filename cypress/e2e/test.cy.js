@@ -1,7 +1,8 @@
 /// <reference types="cypress" />
 import {basePage} from "../pages/BasePage";
-import {garagePage} from "../pages/GaragePage";
-import {expensesPage} from "../pages/ExpensesPage";
+import {generalSteps} from "../steps/general_step";
+import {garageSteps} from "../steps/garage_steps";
+import {expensesSteps} from "../steps/expensesSteps";
 
 function randomEmail() {
     const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -15,104 +16,50 @@ function randomEmail() {
     return email;
 }
 
-
 const testName = "SomeName";
 const testLastName = "SomeLastName"
 const testPassword = "Qwe123!t"
 const testEmailForCreatingUser = randomEmail()
-const testEmailForCreatingCar = randomEmail()
-const testEmailForDeletingCar = randomEmail()
-const testEmailForCarExpenses = randomEmail()
-
 const user1 = {
-    name: testName,
-    lastName: testLastName,
-    email: testEmailForCreatingUser,
-    userPassword: testPassword
+    name: testName, lastName: testLastName, email: testEmailForCreatingUser, userPassword: testPassword
+}
+const existed_user = {
+    name: "email@emailll.com", password: "123qweASD,./",
 }
 
-const user2 = {
-    name: testName,
-    lastName: testLastName,
-    email: testEmailForCreatingCar,
-    userPassword: testPassword
-}
 
-const user3 = {
-    name: testName,
-    lastName: testLastName,
-    email: testEmailForDeletingCar,
-    userPassword: testPassword
-}
-
-const user4 = {
-    name: testName,
-    lastName: testLastName,
-    email: testEmailForCarExpenses,
-    userPassword: testPassword
-}
-
-describe("Test qaAuo", () => {
+describe("User creating", () => {
     beforeEach(() => {
         cy.visit(`/`);
     })
-    it("Visit site", () => {
+    it("Create a random user", () => {
         basePage.signUpButton().should('exist').click()
         basePage.createAccount(user1)
         basePage.verifyCreateAccountData(user1)
         basePage.clickOnCreateAccountButton()
         basePage.verifyAccountIsCreated()
     })
+})
+
+describe("Tests with existed user", () => {
+    beforeEach(() => {
+        cy.visit(`/`);
+        generalSteps.login(existed_user.name, existed_user.password)
+    })
+
     it("Add car to garage", () => {
-        basePage.signUpButton().should('exist').click();
-        basePage.createAccount(user2);
-        basePage.clickOnCreateAccountButton()
-        garagePage.addCarButton().should("exist");
-        garagePage.openAddCarForm();
-        garagePage.addCarModal().should("exist");
-        garagePage.selectAudi()
-        garagePage.selectModelR8()
-        garagePage.addCarMileage()
-        garagePage.clickOnAddButtonInAddCarModal()
-        garagePage.openEditCarModal()
+        garageSteps.addCarToGarage();
+        garageSteps.verifyCarIsExisted();
 
     })
     it("Remove car from garage", () => {
-        basePage.signUpButton().should('exist').click();
-        basePage.createAccount(user3);
-        basePage.clickOnCreateAccountButton()
-        garagePage.addCarButton().should("exist");
-        garagePage.openAddCarForm();
-        garagePage.addCarModal().should("exist");
-        garagePage.selectAudi()
-        garagePage.selectModelR8()
-        garagePage.addCarMileage()
-        garagePage.clickOnAddButtonInAddCarModal()
-        garagePage.openEditCarModal()
-        garagePage.removeCarFromGarage()
-        garagePage.confirmRemoveCarFromGarage()
-        garagePage.emptyGaragePage().should("exist")
+        garageSteps.removeCarFromGarage()
+        garageSteps.verifyCarIsNotExisted()
     })
-
     it("Car Expenses", () => {
-        basePage.signUpButton().should('exist').click();
-        basePage.createAccount(user4);
-        basePage.clickOnCreateAccountButton()
-        garagePage.addCarButton().should("exist");
-        garagePage.openAddCarForm();
-        garagePage.addCarModal().should("exist");
-        garagePage.selectAudi()
-        garagePage.selectModelR8()
-        garagePage.addCarMileage()
-        garagePage.clickOnAddButtonInAddCarModal()
-        expensesPage.openFuelExpensesPage()
-        expensesPage.openAnExpenseModal()
-        expensesPage.addMileage()
-        expensesPage.addExpenseLiters()
-        expensesPage.addExpenseTotalCost()
-        expensesPage.clickOnAddAnExpensesButton()
-        expensesPage.verifyMileage()
-        expensesPage.verifyLiters()
-        expensesPage.verifyTotalCost()
+        garageSteps.addCarToGarage()
+        expensesSteps.addExpensesToCar()
+        expensesSteps.verifyCarExpenses()
+        garageSteps.removeCarFromGarage()
     })
 })

@@ -1,33 +1,41 @@
 import BasePage from "./BasePage";
 
 export default class GaragePage extends BasePage {
-    titleOfGaragePage() {
-        return cy.xpath(`//h1[contains(text(), 'Garage')]`);
+    openGaragePage() {
+        return cy.xpath(`//span[contains(@class, 'icon icon-garage')]`)
+            .should('be.visible')
+            .click();
     }
 
     addCarButton() {
-        return cy.xpath(`//button[contains(text(), 'Add car')]`);
+        return cy.xpath(`//button[contains(text(), 'Add car')]`)
+            .should('be.visible');
     }
 
     openAddCarForm() {
-        return cy.xpath(`//button[contains(text(), 'Add car')]`).click();
+        return cy.xpath(`//button[contains(text(), 'Add car')]`)
+            .click();
     }
 
     addCarModal() {
-        return cy.xpath(`//div[@class='modal-content']`);
+        return cy.xpath(`//div[@class='modal-content']`)
+            .should("exist");
     }
 
     selectAudi() {
-        return cy.xpath(`//select[@id="addCarBrand"]`).select("Audi");
+        return cy.xpath(`//select[@id="addCarBrand"]`)
+            .select("Audi");
     }
 
     selectModelR8() {
-        return cy.xpath(`//select[@id='addCarModel']`).select("R8");
+        return cy.xpath(`//select[@id='addCarModel']`)
+            .select("R8");
         ;
     }
 
     addCarMileage() {
-        return cy.xpath(`//input[@id="addCarMileage"]`).clear().type(1);
+        return cy.xpath(`//input[@id="addCarMileage"]`)
+            .clear().type(1);
     }
 
     titleOfAddCarModal() {
@@ -43,23 +51,31 @@ export default class GaragePage extends BasePage {
     }
 
     clickOnAddButtonInAddCarModal() {
-        return cy.xpath(`//div[contains(@class, 'modal-footer')]/button[contains(text(), 'Add')]`).click();
+        return cy.xpath(`//div[contains(@class, 'modal-footer')]/button[contains(text(), 'Add')]`)
+            .click();
     }
 
     openEditCarModal() {
-        return cy.xpath(`//span[@class='icon icon-edit']`).click();
+        return cy.xpath(`//button[@class='car_edit btn btn-edit']`)
+            .eq(0).should("exist").click();
     }
 
     removeCarFromGarage() {
-        return cy.xpath(`//button[@class='btn btn-outline-danger']`).click();
+        return cy.xpath(`//button[@class='btn btn-outline-danger']`)
+            .should("be.visible").click();
     }
 
     confirmRemoveCarFromGarage() {
-        return cy.xpath(`//button[@class='btn btn-danger']`).click();
+        return cy.xpath(`//button[@class='btn btn-danger']`)
+            .should("be.visible").click();
     }
 
-    emptyGaragePage() {
+    verifyEmptyGaragePage() {
         return cy.xpath(`//p [@class='h3 panel-empty_message']`);
+    }
+
+    verifyAudiA8CarIsExist() {
+        return cy.xpath(`//p[contains(@class, 'car_name h2') and contains(text(), 'Audi R8')]`);
     }
 }
 
